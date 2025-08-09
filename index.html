@@ -82,14 +82,14 @@
     [data-theme="dark"] .theme-toggle{background:var(--snake-gradient);box-shadow:0 4px 15px rgba(0,255,255,0.4)}
     [data-theme="dark"] .theme-toggle:hover{box-shadow:0 6px 25px rgba(0,255,255,0.6)}
 
-    .games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:30px}
+    .games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin-top:30px;max-width:900px;margin-left:auto;margin-right:auto}
     
-    .game-card{background:var(--card-bg);border-radius:16px;padding:30px;text-decoration:none;color:var(--text-primary);transition:all 0.4s ease;border:2px solid var(--border);position:relative;overflow:hidden}
+    .game-card{background:var(--card-bg);border-radius:16px;padding:25px;text-decoration:none;color:var(--text-primary);transition:all 0.4s ease;border:2px solid var(--border);position:relative;overflow:hidden;min-height:200px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
     .game-card:hover{background:var(--card-hover);transform:translateY(-8px) scale(1.02);animation:glow-pulse 2s infinite;text-decoration:none;color:var(--text-primary)}
 
-    .game-icon{font-size:4rem;margin-bottom:20px;display:block;animation:float 3s ease-in-out infinite}
-    .game-title{font-size:1.8rem;font-weight:700;margin:0 0 15px 0;background:var(--snake-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
-    .game-description{font-size:1rem;color:var(--muted);line-height:1.6;margin:0}
+    .game-icon{font-size:3rem;margin-bottom:15px;display:block;animation:float 3s ease-in-out infinite}
+    .game-title{font-size:1.4rem;font-weight:700;margin:0 0 10px 0;background:var(--snake-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
+    .game-description{font-size:0.9rem;color:var(--muted);line-height:1.5;margin:0}
 
     .features{margin-top:40px;padding-top:30px;border-top:1px solid var(--border)}
     .features-title{font-size:1.5rem;font-weight:700;color:var(--text-primary);margin-bottom:20px}
@@ -99,6 +99,9 @@
 
     .footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:0.9rem}
 
+    @media (max-width: 840px) {
+      .games-grid{grid-template-columns:repeat(2,1fr)}
+    }
     @media (max-width: 640px) {
       .title{font-size:2.5rem}
       .container{padding:20px}
@@ -118,22 +121,51 @@
     </div>
 
     <div class="games-grid">
-      <a href="Snake/snake.html" class="game-card"">
+      <a href="snake/snake.html" class="game-card"">
         <span class="game-icon">🐍</span>
         <h2 class="game-title">Snake Game</h2>
         <p class="game-description">
-          Classic snake with a colorful twist! Features vibrant rainbow and cosmic neon themes, 
-          animated food, glowing snake segments, and smooth gameplay. Control with arrow keys 
-          and watch your score climb!
+          Classic snake with colorful themes, animated food, and glowing segments!
+        </p>
+      </a>
+
+      <a href="#" class="game-card" onclick="alert('Replace # with your flappy bird game file path!')">
+        <span class="game-icon">🐦</span>
+        <h2 class="game-title">Flappy Bird</h2>
+        <p class="game-description">
+          Navigate through pipes with vibrant visuals and smooth animations!
         </p>
       </a>
 
       <div class="game-card" style="opacity:0.6;cursor:not-allowed">
-        <span class="game-icon">🎮</span>
-        <h2 class="game-title">More Games Coming</h2>
+        <span class="game-icon">🎯</span>
+        <h2 class="game-title">Target Game</h2>
         <p class="game-description">
-          Additional colorful games will be added soon! Each will feature the same vibrant 
-          theming system with light and dark modes for the perfect gaming experience.
+          Precision aiming game with colorful targets and effects!
+        </p>
+      </div>
+
+      <div class="game-card" style="opacity:0.6;cursor:not-allowed">
+        <span class="game-icon">🧩</span>
+        <h2 class="game-title">Puzzle Quest</h2>
+        <p class="game-description">
+          Mind-bending puzzles with beautiful gradient themes!
+        </p>
+      </div>
+
+      <div class="game-card" style="opacity:0.6;cursor:not-allowed">
+        <span class="game-icon">🏎️</span>
+        <h2 class="game-title">Racing Game</h2>
+        <p class="game-description">
+          High-speed racing with neon trails and dynamic themes!
+        </p>
+      </div>
+
+      <div class="game-card" style="opacity:0.6;cursor:not-allowed">
+        <span class="game-icon">⭐</span>
+        <h2 class="game-title">More Games</h2>
+        <p class="game-description">
+          Additional colorful games coming soon with amazing themes!
         </p>
       </div>
     </div>
