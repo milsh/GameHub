@@ -3,29 +3,60 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Snake — Light Theme (Single Page)</title>
+  <title>Snake — Light/Dark Theme Toggle</title>
   <style>
     :root{
-      --bg:#f2f4f6; /* light background */
+      /* Light theme colors */
+      --bg:#f2f4f6;
       --panel:#ffffff;
       --muted:#444;
-      --accent:#39ff14; /* neon green */
-      --accent-2:#ff4da6; /* neon pink */
+      --accent:#39ff14;
+      --accent-2:#ff4da6;
       --glass: rgba(0,0,0,0.03);
+      --canvas-bg:#fdfdfd;
+      --grid-color:rgba(0,0,0,0.05);
+      --text-primary:#000;
+      --border:rgba(0,0,0,0.06);
+      --shadow:rgba(0,0,0,0.15);
+      --overlay:rgba(255,255,255,0.8);
+      --eye-color:#001200;
     }
+
+    [data-theme="dark"]{
+      /* Dark theme colors */
+      --bg:#0f1419;
+      --panel:#1a1f2e;
+      --muted:#a0a8b7;
+      --accent:#39ff14;
+      --accent-2:#ff4da6;
+      --glass:rgba(255,255,255,0.03);
+      --canvas-bg:#151b26;
+      --grid-color:rgba(255,255,255,0.05);
+      --text-primary:#ffffff;
+      --border:rgba(255,255,255,0.06);
+      --shadow:rgba(0,0,0,0.3);
+      --overlay:rgba(0,0,0,0.8);
+      --eye-color:#001200;
+    }
+
     html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
-    body{background:linear-gradient(180deg,var(--bg), #e0e4e8);display:flex;align-items:center;justify-content:center;color:var(--muted)}
-    .wrap{width:950px;max-width:95vw;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);box-shadow:0 6px 30px rgba(0,0,0,0.15);display:grid;grid-template-columns:1fr 260px;gap:16px}
+    body{background:linear-gradient(180deg,var(--bg), #e0e4e8);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.3s ease}
+    [data-theme="dark"] body{background:linear-gradient(180deg,var(--bg), #0a0e14)}
+    .wrap{width:950px;max-width:95vw;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);box-shadow:0 6px 30px var(--shadow);display:grid;grid-template-columns:1fr 260px;gap:16px}
+    [data-theme="dark"] .wrap{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
     header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
-    h1{color:#000;font-size:18px;margin:0}
+    h1{color:var(--text-primary);font-size:18px;margin:0}
     .meta{color:var(--muted);font-size:13px}
     .game-panel{background:var(--panel);padding:12px;border-radius:10px;display:flex;flex-direction:column;align-items:center}
-    canvas{background:#fdfdfd;border-radius:8px;box-shadow:inset 0 0 30px rgba(0,0,0,0.06), 0 6px 24px rgba(0,0,0,0.15)}
+    canvas{background:var(--canvas-bg);border-radius:8px;box-shadow:inset 0 0 30px rgba(0,0,0,0.06), 0 6px 24px var(--shadow)}
     .sidebar{padding:12px;background:var(--glass);border-radius:10px;display:flex;flex-direction:column;gap:10px}
-    .score{background:transparent;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.05)}
+    .score{background:transparent;padding:10px;border-radius:8px;border:1px solid var(--border)}
     .big{font-size:28px;color:var(--accent);font-weight:700;letter-spacing:1px}
     .label{font-size:12px;color:var(--muted)}
-    .btn{padding:8px 10px;background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--muted);border-radius:8px;cursor:pointer}
+    .btn{padding:8px 10px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;transition:all 0.2s ease}
+    .btn:hover{background:var(--glass);border-color:var(--accent-2)}
+    .theme-toggle{padding:6px 8px;background:var(--panel);border:1px solid var(--border);color:var(--text-primary);border-radius:6px;cursor:pointer;font-size:12px;transition:all 0.2s ease}
+    .theme-toggle:hover{background:var(--glass);border-color:var(--accent)}
     .hint{font-size:12px;color:var(--muted)}
     footer{grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px;margin-top:6px}
     .small{font-size:12px;color:var(--muted)}
@@ -36,10 +67,13 @@
   <div class="wrap">
     <header>
       <div>
-        <h1>Snake — Light Theme</h1>
+        <h1>Snake — Light/Dark Theme</h1>
         <div class="meta">Arrow keys to control • No obstacles • Walls wrap-around</div>
       </div>
-      <div class="meta">High score persists in your browser</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button id="themeToggle" class="theme-toggle">🌙 Dark</button>
+        <div class="meta">High score persists in your browser</div>
+      </div>
     </header>
 
     <div class="game-panel">
@@ -76,6 +110,31 @@
   </div>
 
   <script>
+    // Theme management
+    const THEME_KEY = 'snakeGameTheme';
+    const themeToggle = document.getElementById('themeToggle');
+    
+    function initTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeButton(savedTheme);
+    }
+    
+    function updateThemeButton(theme) {
+      themeToggle.textContent = theme === 'light' ? '🌙 Dark' : '☀️ Light';
+    }
+    
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem(THEME_KEY, newTheme);
+      updateThemeButton(newTheme);
+    }
+    
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Game logic
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
     const grid = 20;
@@ -102,6 +161,18 @@
     const restartBtn = document.getElementById('restart');
 
     highEl.textContent = highScore;
+
+    function getThemeColors() {
+      const root = document.documentElement;
+      const style = getComputedStyle(root);
+      return {
+        canvasBg: style.getPropertyValue('--canvas-bg').trim(),
+        gridColor: style.getPropertyValue('--grid-color').trim(),
+        overlay: style.getPropertyValue('--overlay').trim(),
+        textPrimary: style.getPropertyValue('--text-primary').trim(),
+        eyeColor: style.getPropertyValue('--eye-color').trim()
+      };
+    }
 
     function placeFood(){
       while(true){
@@ -165,10 +236,12 @@
     }
 
     function draw(){
-      ctx.fillStyle = '#f2f4f6';
+      const colors = getThemeColors();
+      
+      ctx.fillStyle = colors.canvasBg;
       ctx.fillRect(0,0,canvas.width,canvas.height);
 
-      ctx.strokeStyle = 'rgba(0,0,0,0.05)';
+      ctx.strokeStyle = colors.gridColor;
       ctx.lineWidth = 1;
       for(let i=0;i<=cols;i++){
         ctx.beginPath();ctx.moveTo(i*grid,0);ctx.lineTo(i*grid,canvas.height);ctx.stroke();
@@ -184,13 +257,13 @@
       for(let i=snake.length-1;i>=0;i--){
         const p = snake[i];
         const shade = i===0 ? '#39ff14' : `rgba(57,255,20,${0.6 - i/snake.length*0.5})`;
-        drawCell(p.x,p.y, shade, i===0);
+        drawCell(p.x,p.y, shade, i===0, colors);
       }
 
       if(gameOver){
-        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.fillStyle = colors.overlay;
         ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = '#000';
+        ctx.fillStyle = colors.textPrimary;
         ctx.font = '36px system-ui';
         ctx.textAlign = 'center';
         ctx.fillText('Game Over', canvas.width/2, canvas.height/2 - 10);
@@ -199,13 +272,13 @@
       }
     }
 
-    function drawCell(x,y,fill, head=false){
+    function drawCell(x,y,fill, head=false, colors=null){
       const px = x*grid;
       const py = y*grid;
       ctx.fillStyle = fill;
       roundRect(ctx, px+1, py+1, grid-2, grid-2, 6, true, false);
-      if(head){
-        ctx.fillStyle = '#001200';
+      if(head && colors){
+        ctx.fillStyle = colors.eyeColor;
         const eyeR = 3;
         const ox = dir.x === 0 ? 6 : (dir.x > 0 ? 10 : 4);
         const oy = dir.y === 0 ? 6 : (dir.y > 0 ? 10 : 4);
@@ -263,6 +336,10 @@
         reset();
         return;
       }
+      if(e.key === 't' || e.key === 'T'){
+        toggleTheme();
+        return;
+      }
 
       switch(e.key){
         case 'ArrowUp': nextDir = {x:0,y:-1}; break;
@@ -275,6 +352,8 @@
     pauseBtn.addEventListener('click', ()=>{ paused = !paused; updateUI(); });
     restartBtn.addEventListener('click', ()=>{ reset(); });
 
+    // Initialize theme on page load
+    initTheme();
     placeFood();
     updateUI();
     requestAnimationFrame(loop);
