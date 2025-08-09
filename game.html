@@ -6,57 +6,79 @@
   <title>Snake — Light/Dark Theme Toggle</title>
   <style>
     :root{
-      /* Light theme colors */
-      --bg:#f2f4f6;
-      --panel:#ffffff;
-      --muted:#444;
-      --accent:#39ff14;
-      --accent-2:#ff4da6;
-      --glass: rgba(0,0,0,0.03);
-      --canvas-bg:#fdfdfd;
-      --grid-color:rgba(0,0,0,0.05);
-      --text-primary:#000;
-      --border:rgba(0,0,0,0.06);
-      --shadow:rgba(0,0,0,0.15);
-      --overlay:rgba(255,255,255,0.8);
-      --eye-color:#001200;
+      /* Light theme colors - Vibrant Rainbow */
+      --bg:linear-gradient(135deg, #ff9a8b 0%, #a8e6cf 25%, #88d8ff 50%, #ffd3a5 75%, #fd9bb4 100%);
+      --panel:rgba(255,255,255,0.9);
+      --muted:#2c3e50;
+      --accent:#00ff88;
+      --accent-2:#ff6b9d;
+      --accent-3:#4ecdc4;
+      --accent-4:#45b7d1;
+      --glass: rgba(255,255,255,0.2);
+      --canvas-bg:linear-gradient(45deg, #fff5f5 0%, #f0fff4 25%, #f0f8ff 50%, #fffacd 75%, #fff0f5 100%);
+      --grid-color:rgba(255,105,180,0.1);
+      --text-primary:#2c3e50;
+      --border:rgba(255,105,180,0.2);
+      --shadow:rgba(255,105,180,0.3);
+      --overlay:rgba(255,255,255,0.85);
+      --eye-color:#ff1744;
+      --food-gradient:linear-gradient(45deg, #ff6b9d, #c44569);
+      --snake-gradient:linear-gradient(45deg, #00ff88, #00d4aa);
     }
 
     [data-theme="dark"]{
-      /* Dark theme colors */
-      --bg:#0f1419;
-      --panel:#1a1f2e;
-      --muted:#a0a8b7;
-      --accent:#39ff14;
-      --accent-2:#ff4da6;
-      --glass:rgba(255,255,255,0.03);
-      --canvas-bg:#151b26;
-      --grid-color:rgba(255,255,255,0.05);
+      /* Dark theme colors - Cosmic Neon */
+      --bg:linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+      --panel:rgba(20,20,40,0.9);
+      --muted:#e0e6ff;
+      --accent:#00ffff;
+      --accent-2:#ff00ff;
+      --accent-3:#ffff00;
+      --accent-4:#ff4081;
+      --glass:rgba(255,255,255,0.05);
+      --canvas-bg:linear-gradient(45deg, #1a1a1a 0%, #2a2a2a 25%, #1f1f1f 50%, #353535 75%, #404040 100%);
+      --grid-color:rgba(0,255,255,0.1);
       --text-primary:#ffffff;
-      --border:rgba(255,255,255,0.06);
-      --shadow:rgba(0,0,0,0.3);
-      --overlay:rgba(0,0,0,0.8);
-      --eye-color:#001200;
+      --border:rgba(255,0,255,0.3);
+      --shadow:rgba(255,0,255,0.4);
+      --overlay:rgba(0,0,0,0.85);
+      --eye-color:#ff0080;
+      --food-gradient:linear-gradient(45deg, #ff00ff, #8a2be2);
+      --snake-gradient:linear-gradient(45deg, #00ffff, #1e90ff);
     }
 
     html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
-    body{background:linear-gradient(180deg,var(--bg), #e0e4e8);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.3s ease}
-    [data-theme="dark"] body{background:linear-gradient(180deg,var(--bg), #0a0e14)}
-    .wrap{width:950px;max-width:95vw;padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);box-shadow:0 6px 30px var(--shadow);display:grid;grid-template-columns:1fr 260px;gap:16px}
-    [data-theme="dark"] .wrap{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent)}
+    body{background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all 0.5s ease;min-height:100vh}
+    [data-theme="dark"] body{animation:cosmic-pulse 3s ease-in-out infinite alternate}
+    
+    @keyframes cosmic-pulse {
+      0% { filter: hue-rotate(0deg) saturate(1); }
+      100% { filter: hue-rotate(10deg) saturate(1.1); }
+    }
+    
+    @keyframes rainbow-shimmer {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    .wrap{width:950px;max-width:95vw;padding:18px;border-radius:16px;background:var(--panel);box-shadow:0 8px 32px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.2);display:grid;grid-template-columns:1fr 260px;gap:16px;backdrop-filter:blur(10px)}
+    [data-theme="dark"] .wrap{box-shadow:0 8px 32px var(--shadow), 0 0 0 1px rgba(255,0,255,0.2), 0 0 20px rgba(0,255,255,0.1)}
     header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
     h1{color:var(--text-primary);font-size:18px;margin:0}
     .meta{color:var(--muted);font-size:13px}
     .game-panel{background:var(--panel);padding:12px;border-radius:10px;display:flex;flex-direction:column;align-items:center}
-    canvas{background:var(--canvas-bg);border-radius:8px;box-shadow:inset 0 0 30px rgba(0,0,0,0.06), 0 6px 24px var(--shadow)}
+    canvas{background:var(--canvas-bg);border-radius:12px;box-shadow:inset 0 2px 10px rgba(0,0,0,0.1), 0 8px 25px var(--shadow);border:2px solid var(--border)}
+    [data-theme="dark"] canvas{box-shadow:inset 0 2px 10px rgba(255,0,255,0.2), 0 8px 25px var(--shadow), 0 0 15px rgba(0,255,255,0.3)}
     .sidebar{padding:12px;background:var(--glass);border-radius:10px;display:flex;flex-direction:column;gap:10px}
     .score{background:transparent;padding:10px;border-radius:8px;border:1px solid var(--border)}
     .big{font-size:28px;color:var(--accent);font-weight:700;letter-spacing:1px}
     .label{font-size:12px;color:var(--muted)}
-    .btn{padding:8px 10px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer;transition:all 0.2s ease}
-    .btn:hover{background:var(--glass);border-color:var(--accent-2)}
-    .theme-toggle{padding:6px 8px;background:var(--panel);border:1px solid var(--border);color:var(--text-primary);border-radius:6px;cursor:pointer;font-size:12px;transition:all 0.2s ease}
-    .theme-toggle:hover{background:var(--glass);border-color:var(--accent)}
+    .btn{padding:8px 12px;background:var(--glass);border:2px solid var(--border);color:var(--text-primary);border-radius:10px;cursor:pointer;transition:all 0.3s ease;font-weight:500}
+    .btn:hover{background:var(--accent-3);color:#ffffff;border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 15px rgba(255,105,180,0.3)}
+    [data-theme="dark"] .btn:hover{background:var(--accent-2);box-shadow:0 4px 15px rgba(255,0,255,0.4)}
+    .theme-toggle{padding:8px 12px;background:var(--food-gradient);border:none;color:#ffffff;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;transition:all 0.3s ease;box-shadow:0 2px 10px rgba(255,105,180,0.3)}
+    .theme-toggle:hover{transform:scale(1.05) rotate(5deg);box-shadow:0 4px 20px rgba(255,105,180,0.5)}
+    [data-theme="dark"] .theme-toggle{background:var(--snake-gradient);box-shadow:0 2px 10px rgba(0,255,255,0.4)}
+    [data-theme="dark"] .theme-toggle:hover{box-shadow:0 4px 20px rgba(0,255,255,0.6)}
     .hint{font-size:12px;color:var(--muted)}
     footer{grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px;margin-top:6px}
     .small{font-size:12px;color:var(--muted)}
@@ -251,13 +273,12 @@
       }
 
       if(food){
-        drawCell(food.x, food.y, '#ff4da6');
+        drawFood(food.x, food.y);
       }
 
       for(let i=snake.length-1;i>=0;i--){
         const p = snake[i];
-        const shade = i===0 ? '#39ff14' : `rgba(57,255,20,${0.6 - i/snake.length*0.5})`;
-        drawCell(p.x,p.y, shade, i===0, colors);
+        drawSnakeSegment(p.x, p.y, i===0, i, snake.length, colors);
       }
 
       if(gameOver){
@@ -272,18 +293,114 @@
       }
     }
 
-    function drawCell(x,y,fill, head=false, colors=null){
-      const px = x*grid;
-      const py = y*grid;
-      ctx.fillStyle = fill;
-      roundRect(ctx, px+1, py+1, grid-2, grid-2, 6, true, false);
-      if(head && colors){
+    function drawFood(x, y) {
+      const px = x * grid;
+      const py = y * grid;
+      const centerX = px + grid / 2;
+      const centerY = py + grid / 2;
+      
+      // Create pulsing food with gradient
+      const time = Date.now() / 1000;
+      const pulse = Math.sin(time * 3) * 0.1 + 0.9;
+      const size = (grid - 4) * pulse;
+      
+      // Outer glow
+      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size);
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        gradient.addColorStop(0, '#ff00ff');
+        gradient.addColorStop(0.7, '#8a2be2');
+        gradient.addColorStop(1, 'rgba(138, 43, 226, 0)');
+      } else {
+        gradient.addColorStop(0, '#ff6b9d');
+        gradient.addColorStop(0.7, '#c44569');
+        gradient.addColorStop(1, 'rgba(196, 69, 105, 0)');
+      }
+      
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, size + 2, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Main food body
+      ctx.fillStyle = isDark ? '#ff00ff' : '#ff6b9d';
+      roundRect(ctx, px + 2, py + 2, grid - 4, grid - 4, 8, true, false);
+      
+      // Sparkle effect
+      for (let i = 0; i < 3; i++) {
+        const sparkleX = centerX + Math.cos(time * 2 + i * 2) * (size / 3);
+        const sparkleY = centerY + Math.sin(time * 2 + i * 2) * (size / 3);
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(sparkleX, sparkleY, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    
+    function drawSnakeSegment(x, y, isHead, segmentIndex, totalLength, colors) {
+      const px = x * grid;
+      const py = y * grid;
+      const centerX = px + grid / 2;
+      const centerY = py + grid / 2;
+      
+      if (isHead) {
+        // Head with gradient and glow
+        const headGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, grid/2);
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+          headGradient.addColorStop(0, '#00ffff');
+          headGradient.addColorStop(1, '#1e90ff');
+        } else {
+          headGradient.addColorStop(0, '#00ff88');
+          headGradient.addColorStop(1, '#00d4aa');
+        }
+        
+        // Outer glow for head
+        const glowGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, grid);
+        glowGradient.addColorStop(0, isDark ? 'rgba(0,255,255,0.3)' : 'rgba(0,255,136,0.3)');
+        glowGradient.addColorStop(1, 'rgba(0,255,136,0)');
+        ctx.fillStyle = glowGradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, grid, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = headGradient;
+        roundRect(ctx, px + 1, py + 1, grid - 2, grid - 2, 8, true, false);
+        
+        // Animated eyes
+        const time = Date.now() / 1000;
+        const eyeBlink = Math.sin(time * 0.5) > 0.8 ? 0.3 : 1;
         ctx.fillStyle = colors.eyeColor;
-        const eyeR = 3;
+        const eyeR = 3 * eyeBlink;
         const ox = dir.x === 0 ? 6 : (dir.x > 0 ? 10 : 4);
         const oy = dir.y === 0 ? 6 : (dir.y > 0 ? 10 : 4);
-        ctx.beginPath(); ctx.arc(px+ox, py+oy, eyeR, 0, Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(px+grid-ox, py+grid-oy, eyeR, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(px + ox, py + oy, eyeR, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(px + grid - ox, py + grid - oy, eyeR, 0, Math.PI * 2); ctx.fill();
+        
+        // Eye highlights
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath(); ctx.arc(px + ox + 1, py + oy - 1, eyeR * 0.4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(px + grid - ox + 1, py + grid - oy - 1, eyeR * 0.4, 0, Math.PI * 2); ctx.fill();
+      } else {
+        // Body segments with color transition
+        const alpha = (totalLength - segmentIndex) / totalLength;
+        const hue = (segmentIndex * 20) % 360;
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        
+        if (isDark) {
+          ctx.fillStyle = `hsl(${180 + hue}, 100%, ${50 + alpha * 30}%)`;
+        } else {
+          ctx.fillStyle = `hsl(${150 + hue}, 80%, ${40 + alpha * 20}%)`;
+        }
+        
+        roundRect(ctx, px + 2, py + 2, grid - 4, grid - 4, 6, true, false);
+        
+        // Body shine effect
+        const shineGradient = ctx.createLinearGradient(px, py, px + grid, py + grid);
+        shineGradient.addColorStop(0, 'rgba(255,255,255,0.2)');
+        shineGradient.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = shineGradient;
+        roundRect(ctx, px + 2, py + 2, grid - 4, grid - 4, 6, true, false);
       }
     }
 
