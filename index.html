@@ -1,1 +1,232 @@
-<h1>Games</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Colorful Games Hub</title>
+  <style>
+    :root{
+      /* Light theme colors - Vibrant Rainbow */
+      --bg:linear-gradient(135deg, #ff9a8b 0%, #a8e6cf 25%, #88d8ff 50%, #ffd3a5 75%, #fd9bb4 100%);
+      --panel:rgba(255,255,255,0.9);
+      --muted:#2c3e50;
+      --accent:#00ff88;
+      --accent-2:#ff6b9d;
+      --accent-3:#4ecdc4;
+      --accent-4:#45b7d1;
+      --glass: rgba(255,255,255,0.2);
+      --text-primary:#2c3e50;
+      --border:rgba(255,105,180,0.2);
+      --shadow:rgba(255,105,180,0.3);
+      --card-bg:rgba(255,255,255,0.8);
+      --card-hover:rgba(255,255,255,0.95);
+      --snake-gradient:linear-gradient(45deg, #00ff88, #00d4aa);
+      --food-gradient:linear-gradient(45deg, #ff6b9d, #c44569);
+      --game-icon:🐍;
+    }
+
+    [data-theme="dark"]{
+      /* Dark theme colors - Cosmic Neon */
+      --bg:linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+      --panel:rgba(20,20,40,0.9);
+      --muted:#e0e6ff;
+      --accent:#00ffff;
+      --accent-2:#ff00ff;
+      --accent-3:#ffff00;
+      --accent-4:#ff4081;
+      --glass:rgba(255,255,255,0.05);
+      --text-primary:#ffffff;
+      --border:rgba(255,0,255,0.3);
+      --shadow:rgba(255,0,255,0.4);
+      --card-bg:rgba(20,20,40,0.8);
+      --card-hover:rgba(30,30,50,0.95);
+      --snake-gradient:linear-gradient(45deg, #00ffff, #1e90ff);
+      --food-gradient:linear-gradient(45deg, #ff00ff, #8a2be2);
+      --game-icon:🐍;
+    }
+
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;scroll-behavior:smooth}
+    body{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);transition:all 0.5s ease;min-height:100vh;padding:20px;box-sizing:border-box}
+    [data-theme="dark"] body{animation:cosmic-pulse 3s ease-in-out infinite alternate}
+    
+    @keyframes cosmic-pulse {
+      0% { filter: hue-rotate(0deg) saturate(1); }
+      100% { filter: hue-rotate(10deg) saturate(1.1); }
+    }
+    
+    @keyframes rainbow-shimmer {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 20px var(--shadow); }
+      50% { box-shadow: 0 0 40px var(--shadow), 0 0 60px var(--border); }
+    }
+
+    .container{max-width:800px;width:100%;padding:40px;background:var(--panel);border-radius:20px;box-shadow:0 8px 32px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.2);backdrop-filter:blur(10px);text-align:center}
+    [data-theme="dark"] .container{box-shadow:0 8px 32px var(--shadow), 0 0 0 1px rgba(255,0,255,0.2), 0 0 20px rgba(0,255,255,0.1)}
+
+    .header{margin-bottom:40px}
+    .title{font-size:3.5rem;font-weight:800;background:var(--snake-gradient);background-clip:text;-webkit-background-clip:text;color:transparent;animation:rainbow-shimmer 3s linear infinite;margin:0;letter-spacing:-2px}
+    .subtitle{font-size:1.2rem;color:var(--muted);margin:10px 0 0 0;font-weight:400}
+
+    .theme-controls{display:flex;justify-content:center;margin-bottom:30px}
+    .theme-toggle{padding:12px 20px;background:var(--food-gradient);border:none;color:#ffffff;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;transition:all 0.3s ease;box-shadow:0 4px 15px rgba(255,105,180,0.3)}
+    .theme-toggle:hover{transform:scale(1.05) rotate(5deg);box-shadow:0 6px 25px rgba(255,105,180,0.5)}
+    [data-theme="dark"] .theme-toggle{background:var(--snake-gradient);box-shadow:0 4px 15px rgba(0,255,255,0.4)}
+    [data-theme="dark"] .theme-toggle:hover{box-shadow:0 6px 25px rgba(0,255,255,0.6)}
+
+    .games-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;margin-top:30px}
+    
+    .game-card{background:var(--card-bg);border-radius:16px;padding:30px;text-decoration:none;color:var(--text-primary);transition:all 0.4s ease;border:2px solid var(--border);position:relative;overflow:hidden}
+    .game-card:hover{background:var(--card-hover);transform:translateY(-8px) scale(1.02);animation:glow-pulse 2s infinite;text-decoration:none;color:var(--text-primary)}
+
+    .game-icon{font-size:4rem;margin-bottom:20px;display:block;animation:float 3s ease-in-out infinite}
+    .game-title{font-size:1.8rem;font-weight:700;margin:0 0 15px 0;background:var(--snake-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
+    .game-description{font-size:1rem;color:var(--muted);line-height:1.6;margin:0}
+
+    .features{margin-top:40px;padding-top:30px;border-top:1px solid var(--border)}
+    .features-title{font-size:1.5rem;font-weight:700;color:var(--text-primary);margin-bottom:20px}
+    .features-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;text-align:left}
+    .feature-item{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.95rem}
+    .feature-icon{font-size:1.2rem;background:var(--food-gradient);background-clip:text;-webkit-background-clip:text;color:transparent}
+
+    .footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);color:var(--muted);font-size:0.9rem}
+
+    @media (max-width: 640px) {
+      .title{font-size:2.5rem}
+      .container{padding:20px}
+      .games-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">Colorful Games Hub</h1>
+      <p class="subtitle">Experience vibrant gaming with dynamic themes</p>
+    </header>
+
+    <div class="theme-controls">
+      <button id="themeToggle" class="theme-toggle">🌙 Switch to Dark</button>
+    </div>
+
+    <div class="games-grid">
+      <a href="#" class="game-card" onclick="alert('Replace # with your snake game file path!')">
+        <span class="game-icon">🐍</span>
+        <h2 class="game-title">Snake Game</h2>
+        <p class="game-description">
+          Classic snake with a colorful twist! Features vibrant rainbow and cosmic neon themes, 
+          animated food, glowing snake segments, and smooth gameplay. Control with arrow keys 
+          and watch your score climb!
+        </p>
+      </a>
+
+      <div class="game-card" style="opacity:0.6;cursor:not-allowed">
+        <span class="game-icon">🎮</span>
+        <h2 class="game-title">More Games Coming</h2>
+        <p class="game-description">
+          Additional colorful games will be added soon! Each will feature the same vibrant 
+          theming system with light and dark modes for the perfect gaming experience.
+        </p>
+      </div>
+    </div>
+
+    <div class="features">
+      <h3 class="features-title">✨ Features</h3>
+      <div class="features-list">
+        <div class="feature-item">
+          <span class="feature-icon">🌈</span>
+          <span>Dynamic Light/Dark Themes</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🎨</span>
+          <span>Vibrant Color Palettes</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">✨</span>
+          <span>Smooth Animations</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">💫</span>
+          <span>Special Effects</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🎯</span>
+          <span>Responsive Design</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">⚡</span>
+          <span>Fast Performance</span>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>🎮 Built with love for colorful gaming experiences • Theme preferences saved automatically</p>
+    </footer>
+  </div>
+
+  <script>
+    // Theme management
+    const THEME_KEY = 'colorfulGamesTheme';
+    const themeToggle = document.getElementById('themeToggle');
+    
+    function initTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeButton(savedTheme);
+    }
+    
+    function updateThemeButton(theme) {
+      themeToggle.textContent = theme === 'light' ? '🌙 Switch to Dark' : '☀️ Switch to Light';
+    }
+    
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem(THEME_KEY, newTheme);
+      updateThemeButton(newTheme);
+    }
+    
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Keyboard shortcut for theme toggle
+    window.addEventListener('keydown', e => {
+      if(e.key === 't' || e.key === 'T'){
+        toggleTheme();
+        return;
+      }
+    });
+
+    // Initialize theme on page load
+    initTheme();
+
+    // Add some sparkle effects for fun
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.innerHTML = '✨';
+      sparkle.style.position = 'fixed';
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.top = Math.random() * window.innerHeight + 'px';
+      sparkle.style.pointerEvents = 'none';
+      sparkle.style.fontSize = Math.random() * 20 + 10 + 'px';
+      sparkle.style.zIndex = '1000';
+      sparkle.style.animation = 'float 2s ease-out forwards';
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => sparkle.remove(), 2000);
+    }
+
+    // Occasional sparkles
+    setInterval(createSparkle, 3000);
+  </script>
+</body>
+</html>
